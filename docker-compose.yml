@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: "sft_django"
+    hostname: sft_django
+    depends_on: [db]
+    env_file:
+      - ./ex.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    command: ['sh', './startup.sh']
+
+  db:
+    hostname: pghost
+    image: postgres
+    ports:
+      - "5555:5432"
+    env_file:
+      - ./ex.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:
