@@ -9,9 +9,9 @@ class LoanApplicationView(APIView):
         values = LoanApplication.objects.filter(
             contract=contract_id,
             products__isnull=False,
-        ).values('products__manufacturer_id').distinct()
+        ).values_list('products__manufacturer_id', flat=True).distinct()
 
         if not values:
             return response.Response(status=404)
 
-        return response.Response([value['products__manufacturer_id'] for value in values])
+        return response.Response(values)
